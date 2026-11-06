@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Style Haven - Master End-to-End Functional Flow</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 10mm 8mm 10mm 8mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.45;
+    font-size: 10.5px;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    color: #0f172a;
+    font-size: 18px;
+    border-bottom: 2.5px solid #2563eb;
+    padding-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+  h2 {
+    color: #1e3a8a;
+    font-size: 14px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 3px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #1d4ed8;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+  p, li {
+    font-size: 10px;
+    color: #334155;
+    margin: 3px 0;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 10px 0;
+  }
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 8.5px;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  code {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 1px 3px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-family: Menlo, Monaco, Consolas, monospace;
+  }
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+  .table-container {
+    margin: 6px 0 10px 0;
+    width: 100%;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+  th {
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 5px 4px;
+    border: 1px solid #334155;
+  }
+  td {
+    padding: 4px 5px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+    background-color: #ffffff;
+  }
+  tbody tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  strong {
+    color: #0f172a;
+  }
+</style>
+</head>
+<body>
+<h1>Solid Master End-to-End Functional Test Flow: Complete Shopper Lifecycle</h1>
+<p><strong>Flow ID:</strong> <code>E2E-STYLE-HAVEN-COMPLETE-01</code></p>
+<p><strong>Flow Name:</strong> Unified Shopper Journey: Onboarding, Catalog Discovery, Cart Management, Multi-Tier Checkout & Order Fulfillment</p>
+<p><strong>Modules Covered:</strong></p>
+<li>Module 1: User Accounts & Profile Management</li>
+<li>Module 2: Product Catalog, Search, Filtering & Recommendations</li>
+<li>Module 3: Shopping Cart (Add/Remove, Quantity Adjustments, Promo, Order Summary)</li>
+<li>Module 4: Checkout (Shipping Tier Selection, Payment Gateways, Confirmation)</li>
+<p><strong>Primary Objective:</strong> Validate the seamless, uninterrupted functional journey of a fashion shopper on Style Haven—from registration and profile setup through search discovery, variant validation, cart mutations, discount application, shipping calculation, multi-method payment execution, order confirmation, and order history tracking.</p>
+<p><strong>Severity / Priority:</strong> P1 / Blocker</p>
+<p><strong>Target Execution Environment:</strong> Staging / Pre-Production</p>
+<p><strong>Estimated Run Time:</strong> Manual: ~25 mins | Automated (Playwright): ~1 min 20 sec</p>
+<hr/>
+<h2>1. Flow Overview & Architecture Diagram</h2>
+<pre><code>[ Phase 1: Onboarding &amp; Profile Setup ]
+  User Registration -&gt; Secure Password Check -&gt; Email Verification -&gt; Save Default Address
+         │
+         ▼
+[ Phase 2: Catalog Discovery &amp; PDP Variant Validation ]
+  Fuzzy Search (&quot;vntage&quot;) -&gt; Faceted Filter (Size M, Brand, Price) -&gt; Variant Swatch Matrix
+         │
+         ▼
+[ Phase 3: Shopping Cart Management ]
+  Add Variant to Cart -&gt; Mini-cart Flyout -&gt; Adjust Quantity (+/-) -&gt; Stock Boundary Check -&gt; Promo Code &amp; Tax Calculation
+         │
+         ▼
+[ Phase 4: Multi-Step Checkout ]
+  Auto-populate Default Address -&gt; Select Shipping Tier (Standard vs Express) -&gt; Review Summary
+         │
+         ▼
+[ Phase 5: Payment Processing &amp; Idempotency ]
+  Credit Card / Digital Wallet -&gt; 3D-Secure Challenge -&gt; Idempotent API Transaction -&gt; Webhook Event
+         │
+         ▼
+[ Phase 6: Order Confirmation &amp; History Tracking ]
+  Render Order Success Screen -&gt; Dispatch Asynchronous Email -&gt; Real-time Order History State</code></pre>
+<hr/>
+<h2>2. Pre-conditions & Test Data Setup</h2>
+<div class="table-container"><table>
+<thead><tr><th>Category</th><th>Prerequisite Details</th></tr></thead><tbody>
+<tr><td><strong>Environment State</strong></td><td>Staging / QA environment with active Elasticsearch/Algolia cluster, Redis session/cart store, Stripe sandbox, and notification email worker.</td></tr>
+<tr><td><strong>Catalog State</strong></td><td>Populated catalog featuring: <br/>1. <em>Primary Item:</em> "Linen Oversized Blazer" by Atelier Noir ($120.00). Color: Black, Size: M (Stock = 5).<br/>2. <em>Secondary Item:</em> "Silk Slip Dress" by Studio Minimal ($85.00). Color: Emerald, Size: S (Stock = 2).</td></tr>
+<tr><td><strong>Promotion Data</strong></td><td>Active coupon code: <code>WELCOME10</code> (10% off total subtotal). Free shipping threshold: $150.00.</td></tr>
+<tr><td><strong>Shipping Matrix</strong></td><td>Standard Shipping (3-5 business days): $8.00 (Free over $150). Express Shipping (1-2 business days): $20.00.</td></tr>
+<tr><td><strong>Test User Persona</strong></td><td>Email: <code>shopper.fashion.e2e_<timestamp>@stylehaven.io</code>, Password: <code>SecurePass#2026!</code>, Shipping Address: <code>452 Fashion Ave, Apt 12B, New York, NY 10018</code>.</td></tr>
+<tr><td><strong>Payment Instrument</strong></td><td>Stripe 3DS Test Card (<code>4000 0000 0000 3220</code>, Exp: 12/28, CVC: 123) for verified frictionless payment; Apple Pay / Digital Wallet mock.</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>3. Comprehensive Step-by-Step E2E Test Execution</h2>
+<div class="table-container"><table>
+<thead><tr><th>Step #</th><th>Stage / Lifecycle Phase</th><th>Given / When / Then Test Steps</th><th>System Action & Internal Event</th><th>Expected Result & Verification Points</th><th>Pass/Fail Criteria</th></tr></thead><tbody>
+<tr><td><strong>01</strong></td><td><strong>User Registration & Policy Enforcement</strong></td><td><strong>Given</strong> user is on <code>/register</code><br/><strong>When</strong> user inputs first name, last name, unique email, and compliant password <code>SecurePass#2026!</code><br/><strong>And</strong> clicks "Create Account"<br/><strong>Then</strong> registration request is submitted</td><td>Client checks password policy (12+ chars, uppercase, lowercase, special char). API triggers <code>POST /api/v1/auth/register</code>, hashes password with bcrypt, generates verification token.</td><td>- Form validation passes with green check indicators.<br/>- Verification screen appears: "Check your inbox".<br/>- Account record created in DB with <code>is_verified: false</code>.</td><td><strong>PASS:</strong> Verification email dispatched with valid signed token within 5 seconds.</td></tr>
+<tr><td><strong>02</strong></td><td><strong>Email Verification & Session Generation</strong></td><td><strong>Given</strong> verification email is received<br/><strong>When</strong> user clicks the activation link (<code>/verify?token=...</code>)<br/><strong>Then</strong> account is activated and user logs in</td><td>Token is validated by backend, setting <code>is_verified: true</code>. Backend issues <code>accessToken</code> (HTTP-only JWT) and <code>refreshToken</code>.</td><td>- UI displays "Email verified successfully!".<br/>- User redirected to <code>/account/overview</code>.<br/>- Global navbar updates from "Sign In" to user avatar with first name initial.</td><td><strong>PASS:</strong> Authenticated session active; JWT stored securely in HTTP-only cookie.</td></tr>
+<tr><td><strong>03</strong></td><td><strong>Profile & Default Address Configuration</strong></td><td><strong>Given</strong> authenticated user is in <code>/account/profile</code><br/><strong>When</strong> user inputs phone <code>+1 212-555-0199</code><br/><strong>And</strong> adds shipping address: <code>452 Fashion Ave, Apt 12B, New York, NY, 10018</code><br/><strong>And</strong> toggles "Set as Default Shipping Address"<br/><strong>Then</strong> clicks "Save Changes"</td><td>Client executes <code>PUT /api/v1/user/profile</code> and <code>POST /api/v1/user/addresses</code>. Server validates postal code and strips malicious XSS tags.</td><td>- Notification toast: "Profile and address saved".<br/>- Address card displays "DEFAULT" badge.<br/>- Reloading <code>/account/profile</code> retains all saved values without data loss.</td><td><strong>PASS:</strong> Address persisted; XSS injection payload sanitized; default flag set to true.</td></tr>
+<tr><td><strong>04</strong></td><td><strong>Catalog Discovery & Typo Tolerance</strong></td><td><strong>Given</strong> user is on storefront<br/><strong>When</strong> user enters typo keyword <code>vntage jaket</code> in search bar and presses Enter<br/><strong>Then</strong> search query executes</td><td>Request <code>GET /api/v1/catalog/search?q=vntage+jaket</code> sent to Elasticsearch/Algolia service. Fuzzy logic matches levenshtein distance <= 2.</td><td>- Search header displays: <em>"Showing results for <strong>vintage jacket</strong> (Did you mean: vintage jacket?)"</em>.<br/>- Results grid populates relevant outerwear items.<br/>- Zero-result empty state is NOT triggered.</td><td><strong>PASS:</strong> Accurate results returned despite spelling mistakes; query time < 350ms.</td></tr>
+<tr><td><strong>05</strong></td><td><strong>Faceted Filtering & Sorting Matrix</strong></td><td><strong>Given</strong> user views search/catalog results<br/><strong>When</strong> user selects filters:<br/>  - Category: "Women's Blazers"<br/>  - Brand: "Atelier Noir"<br/>  - Size: "M"<br/>  - Price: "$50 - $150"<br/><strong>And</strong> selects sort: "Newest First"<br/><strong>Then</strong> catalog query refreshes</td><td>URL parameters dynamically update to <code>/catalog?category=blazers&brand=atelier-noir&size=M&price=50-150&sort=newest</code> without full page refresh.</td><td>- Product grid dynamically filters to matching items only.<br/>- Filter badge chips display selected attributes with "x" remove options.<br/>- Result count counter reflects the filtered subset.</td><td><strong>PASS:</strong> URL state matches applied filters; product grid displays only items satisfying all criteria.</td></tr>
+<tr><td><strong>06</strong></td><td><strong>PDP Variant Selection & Out-of-Stock Logic</strong></td><td><strong>Given</strong> user opens PDP for "Linen Oversized Blazer"<br/><strong>When</strong> user clicks color swatch "Cream"<br/><strong>And</strong> selects size button "M" (Configured out of stock)<br/><strong>Then</strong> stock availability engine runs</td><td>Component checks variant matrix <code>SKU-BLAZER-CRM-M</code> where <code>stock_count == 0</code>.</td><td>- "Add to Cart" button immediately changes to disabled <strong>"Out of Stock"</strong>.<br/>- Subtext displays "Notify me when available" input box.<br/>- Image gallery swaps to photos of the <strong>Cream</strong> color variant.</td><td><strong>PASS:</strong> System prevents adding zero-inventory variant; UI correctly reflects out-of-stock state.</td></tr>
+<tr><td><strong>07</strong></td><td><strong>In-Stock Variant Selection & Add to Cart</strong></td><td><strong>Given</strong> user is on the same PDP<br/><strong>When</strong> user clicks color swatch "Black"<br/><strong>And</strong> clicks size button "M" (Configured in stock = 5)<br/><strong>And</strong> clicks active "Add to Cart" button<br/><strong>Then</strong> cart mutation is triggered</td><td>Client issues <code>POST /api/v1/cart/items</code> with payload <code>{ sku: 'SKU-BLAZER-BLK-M', qty: 1 }</code>. Redis session cart increments.</td><td>- Mini-cart drawer flies out from right side of screen.<br/>- Product thumbnail, "Black / M", $120.00 price, and quantity '1' display correctly.<br/>- Header cart badge icon increments from 0 to 1.</td><td><strong>PASS:</strong> Item added to cart; session cart persists across browser reload.</td></tr>
+<tr><td><strong>08</strong></td><td><strong>Secondary Item Addition & Wishlist Navigation</strong></td><td><strong>Given</strong> user opens second product "Silk Slip Dress" ($85.00)<br/><strong>When</strong> user selects Color: Emerald, Size: S<br/><strong>And</strong> clicks "Add to Cart"<br/><strong>Then</strong> navigates to <code>/cart</code> page</td><td>Client sends second <code>POST /api/v1/cart/items</code>. Cart consolidates items under user ID.</td><td>- Full shopping cart page renders 2 distinct line items.<br/>- Subtotal displays: $120.00 + $85.00 = <strong>$205.00</strong>.<br/>- Free shipping indicator shows "🎉 Congratulations! You unlocked Free Shipping!".</td><td><strong>PASS:</strong> Multiple line items coexist; subtotal calculates accurately.</td></tr>
+<tr><td><strong>09</strong></td><td><strong>Cart Quantity Adjustments & Inventory Ceiling</strong></td><td><strong>Given</strong> user is on <code>/cart</code><br/><strong>When</strong> user clicks <code>+</code> on "Silk Slip Dress" (only 2 in stock)<br/><strong>And</strong> clicks <code>+</code> a second time (attempting quantity = 3)<br/><strong>Then</strong> inventory boundary validation fires</td><td>Client evaluates requested quantity against stock inventory API. Quantity clamps to max available stock (2).</td><td>- Quantity updates from 1 to 2; line total updates to $170.00.<br/>- Third click triggers inline notification: <em>"Only 2 units available in stock"</em>; quantity button disables at 2.<br/>- Subtotal recalculates to $120.00 + $170.00 = <strong>$290.00</strong>.</td><td><strong>PASS:</strong> User cannot exceed warehouse inventory ceiling; totals update reactively.</td></tr>
+<tr><td><strong>10</strong></td><td><strong>Cart Item Removal & Quantity Reduction</strong></td><td><strong>Given</strong> user is on <code>/cart</code><br/><strong>When</strong> user clicks <code>-</code> on "Silk Slip Dress" reducing it back to 1 unit<br/><strong>And</strong> clicks "Remove" (trash icon) on "Silk Slip Dress"<br/><strong>Then</strong> removal confirmation dialog is accepted</td><td>Client sends <code>DELETE /api/v1/cart/items/{itemId}</code>. Cart recalculates subtotal with remaining "Linen Oversized Blazer".</td><td>- "Silk Slip Dress" is removed with smooth exit animation.<br/>- Cart badge decrements to 1.<br/>- Subtotal recalculates to <strong>$120.00</strong>.<br/>- Free shipping bar re-evaluates: "Add $30.00 more for Free Shipping".</td><td><strong>PASS:</strong> Item cleanly purged from session; UI and price recalculations synchronized.</td></tr>
+<tr><td><strong>11</strong></td><td><strong>Promo Code & Discount Application</strong></td><td><strong>Given</strong> cart subtotal is $120.00<br/><strong>When</strong> user enters coupon code <code>WELCOME10</code> into promo box<br/><strong>And</strong> clicks "Apply"<br/><strong>Then</strong> discount engine validates coupon rules</td><td>Client sends <code>POST /api/v1/cart/coupons</code> with code. Engine checks expiration date, user usage limit, and minimum spend.</td><td>- Success toast: "Coupon WELCOME10 applied (10% off)".<br/>- Discount line item appears: <code>-$12.00</code>.<br/>- Discounted subtotal: <strong>$108.00</strong>.<br/>- Estimated tax (8.875% NY): <strong>$9.59</strong>.<br/>- Order Summary clearly displays: Subtotal ($120.00), Discount (-$12.00), Tax ($9.59).</td><td><strong>PASS:</strong> Discount accurately deducted; taxes calculated on post-discount amount.</td></tr>
+<tr><td><strong>12</strong></td><td><strong>Checkout Step 1: Shipping Address Selection</strong></td><td><strong>Given</strong> user clicks "Proceed to Checkout"<br/><strong>When</strong> user arrives at <code>/checkout</code><br/><strong>Then</strong> step 1 (Shipping Address) renders</td><td>Checkout engine queries user profile addresses (<code>GET /api/v1/user/addresses</code>).</td><td>- Default address saved in Step 03 (<code>452 Fashion Ave, Apt 12B...</code>) is pre-selected by default.<br/>- Option to "Use a different address" is visible.<br/>- Contact phone and email pre-fill automatically.</td><td><strong>PASS:</strong> Zero redundant data entry for logged-in users; address validation passes.</td></tr>
+<tr><td><strong>13</strong></td><td><strong>Checkout Step 2: Shipping Method Selection & Live Rate Update</strong></td><td><strong>Given</strong> shipping address is confirmed<br/><strong>When</strong> user views Shipping Method options:<br/>  - Standard (3-5 days): $8.00<br/>  - Express (1-2 days): $20.00<br/><strong>And</strong> selects "Express Shipping"<br/><strong>Then</strong> order summary updates reactively</td><td>Client sends selected shipping rate ID to checkout session endpoint.</td><td>- Order summary immediately recalculates:<br/>  - Items: $108.00<br/>  - Shipping: $20.00<br/>  - Tax: $9.59<br/>  - <strong>Estimated Total: $137.59</strong>.<br/>- Delivery date estimate updates dynamically (e.g., "Arrives by Oct 17").</td><td><strong>PASS:</strong> Shipping fee accurately added to total; UI updates without full page reload.</td></tr>
+<tr><td><strong>14</strong></td><td><strong>Checkout Step 3: Payment Gateway & 3D Secure Verification</strong></td><td><strong>Given</strong> user proceeds to Payment step<br/><strong>When</strong> user inputs test card details with 3DS challenge<br/><strong>And</strong> clicks "Place Order ($137.59)"<br/><strong>And</strong> completes OTP authentication in 3DS modal<br/><strong>Then</strong> payment authorization is processed</td><td>Frontend tokenizes card via Stripe Elements; sends <code>POST /api/v1/orders/checkout</code> with unique <code>idempotency_key</code>. Gateway processes charge.</td><td>- 3DS authentication modal resolves successfully.<br/>- Loading overlay displays "Securing your order...".<br/>- Double-clicking "Place Order" button is prevented via disabled state.<br/>- Backend initiates inventory deduction and transitions order to <code>PAID</code>.</td><td><strong>PASS:</strong> Payment captured; idempotency prevents double charge; charge ID returned.</td></tr>
+<tr><td><strong>15</strong></td><td><strong>Order Confirmation & Email Receipt Delivery</strong></td><td><strong>Given</strong> payment is authorized<br/><strong>When</strong> browser completes redirect to <code>/order-success/{orderId}</code><br/><strong>Then</strong> order confirmation screen renders</td><td>Order service persists order in DB, triggers asynchronous message to email queue (<code>order.confirmed</code>), and empties user shopping cart.</td><td>- Order Success page displays confirmation checkmark, unique Order ID (e.g., <code>#SH-98241</code>), delivery address, and chosen shipping speed.<br/>- Shopping cart badge resets to 0.<br/>- Customer receives confirmation email with PDF invoice within 30 seconds.</td><td><strong>PASS:</strong> Clean success state; cart cleared; asynchronous email receipt triggered.</td></tr>
+<tr><td><strong>16</strong></td><td><strong>Order History & Real-Time Tracking Validation</strong></td><td><strong>Given</strong> user placed order <code>#SH-98241</code><br/><strong>When</strong> user navigates to <code>/account/orders</code><br/><strong>Then</strong> user inspects order history record</td><td>Client fetches <code>GET /api/v1/user/orders</code>.</td><td>- Most recent order <code>#SH-98241</code> appears at top of order history list.<br/>- Displays exact purchase date, item thumbnail ("Linen Oversized Blazer - Black / M"), total paid ($137.59), and status badge <strong>"Processing / Order Placed"</strong>.<br/>- Clicking "View Order Details" opens complete breakdown with tracking link.</td><td><strong>PASS:</strong> Order persisted in user history; matches checkout invoice and SKU details.</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>4. Non-Functional, Concurrency & Security Edge Validations</h2>
+<p>1. <strong>Cart Abandonment & Resumption across Devices:</strong></p>
+<li>User adds "Linen Oversized Blazer" on Mobile Safari, logs into Desktop Chrome 2 hours later. The cart must immediately restore items, quantities, and applied promo code without discrepancy.</li>
+<p>2. <strong>Double-Click & Concurrent Checkout Prevention:</strong></p>
+<li>Rapidly clicking "Place Order" 5 times in quick succession must only dispatch one single financial transaction due to frontend button debouncing and backend idempotency keys (<code>Idempotency-Key: <uuid></code>).</li>
+<p>3. <strong>Mid-Checkout Price Alteration:</strong></p>
+<li>If a seller updates the product price while an item sits in a customer's cart, the checkout submission must validate prices against the live database, alert the user of the price difference, and require re-confirmation before charging.</li>
+<p>4. <strong>Stock Reservation Timeout:</strong></p>
+<li>When a user enters the final checkout payment step, stock is temporarily held for 10 minutes. If the user abandons the payment modal, the lock expires and stock returns to the public catalog.</li>
+<hr/>
+<h2>5. Playwright Automation Implementation Spec</h2>
+<pre><code>// tests/e2e/master-shopper-journey.spec.ts
+import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test.describe(&#x27;Master E2E Flow: Onboarding, Catalog, Cart &amp; Checkout&#x27;, () =&gt; {
+  const timestamp = Date.now();
+  const testEmail = `shopper_${timestamp}@stylehaven.io`;
+  const password = &#x27;SecurePass#2026!&#x27;;
+
+  test(&#x27;Complete E2E Shopper Journey from Registration to Paid Order&#x27;, async ({ page }) =&gt; {
+    // 1. Registration &amp; Verification
+    await page.goto(&#x27;/register&#x27;);
+    await page.fill(&#x27;input[name=&quot;firstName&quot;]&#x27;, &#x27;Elena&#x27;);
+    await page.fill(&#x27;input[name=&quot;lastName&quot;]&#x27;, &#x27;Rostova&#x27;);
+    await page.fill(&#x27;input[name=&quot;email&quot;]&#x27;, testEmail);
+    await page.fill(&#x27;input[name=&quot;password&quot;]&#x27;, password);
+    await page.click(&#x27;button[type=&quot;submit&quot;]&#x27;);
+    await expect(page.locator(&#x27;.verification-notice&#x27;)).toBeVisible();
+
+    await page.goto(`/verify?token=mock_valid_token_${timestamp}`);
+    await expect(page.locator(&#x27;.navbar-user-avatar&#x27;)).toBeVisible();
+
+    // 2. Profile Setup (Address)
+    await page.goto(&#x27;/account/profile&#x27;);
+    await page.fill(&#x27;input[name=&quot;addressLine1&quot;]&#x27;, &#x27;452 Fashion Ave, Apt 12B&#x27;);
+    await page.fill(&#x27;input[name=&quot;city&quot;]&#x27;, &#x27;New York&#x27;);
+    await page.selectOption(&#x27;select[name=&quot;state&quot;]&#x27;, &#x27;NY&#x27;);
+    await page.fill(&#x27;input[name=&quot;zip&quot;]&#x27;, &#x27;10018&#x27;);
+    await page.check(&#x27;input[name=&quot;isDefaultShipping&quot;]&#x27;);
+    await page.click(&#x27;button:has-text(&quot;Save Changes&quot;)&#x27;);
+    await expect(page.locator(&#x27;.toast-success&#x27;)).toBeVisible();
+
+    // 3. Catalog Search, Filter &amp; Variant Selection
+    await page.fill(&#x27;input[type=&quot;search&quot;]&#x27;, &#x27;vntage jaket&#x27;);
+    await page.keyboard.press(&#x27;Enter&#x27;);
+    await page.click(&#x27;label:has-text(&quot;Atelier Noir&quot;)&#x27;);
+    await page.click(&#x27;button[data-size=&quot;M&quot;]&#x27;);
+    await page.click(&#x27;.product-card:has-text(&quot;Linen Oversized Blazer&quot;)&#x27;);
+
+    // Test Out-of-Stock Variant
+    await page.click(&#x27;button[data-color=&quot;Cream&quot;]&#x27;);
+    await page.click(&#x27;button[data-size=&quot;M&quot;]&#x27;);
+    await expect(page.locator(&#x27;button.btn-add-to-cart&#x27;)).toBeDisabled();
+
+    // Select In-Stock Variant &amp; Add to Cart
+    await page.click(&#x27;button[data-color=&quot;Black&quot;]&#x27;);
+    await expect(page.locator(&#x27;button.btn-add-to-cart&#x27;)).toBeEnabled();
+    await page.click(&#x27;button.btn-add-to-cart&#x27;);
+    await expect(page.locator(&#x27;.mini-cart-drawer&#x27;)).toBeVisible();
+    await expect(page.locator(&#x27;.navbar-cart-badge&#x27;)).toHaveText(&#x27;1&#x27;);
+
+    // 4. Cart Adjustments &amp; Promo Code
+    await page.goto(&#x27;/cart&#x27;);
+    await expect(page.locator(&#x27;.cart-line-item&#x27;)).toHaveCount(1);
+    await page.fill(&#x27;input[name=&quot;couponCode&quot;]&#x27;, &#x27;WELCOME10&#x27;);
+    await page.click(&#x27;button:has-text(&quot;Apply&quot;)&#x27;);
+    await expect(page.locator(&#x27;.discount-line&#x27;)).toContainText(&#x27;-$12.00&#x27;);
+
+    // 5. Checkout: Shipping &amp; Payment
+    await page.click(&#x27;button:has-text(&quot;Proceed to Checkout&quot;)&#x27;);
+    await expect(page.locator(&#x27;#selected-shipping-address&#x27;)).toContainText(&#x27;452 Fashion Ave&#x27;);
+
+    await page.click(&#x27;input[value=&quot;express_shipping&quot;]&#x27;);
+    await expect(page.locator(&#x27;#order-total-amount&#x27;)).toContainText(&#x27;$137.59&#x27;);
+
+    // 6. Complete Payment
+    await page.fill(&#x27;#stripe-card-number&#x27;, &#x27;4000000000003220&#x27;);
+    await page.fill(&#x27;#stripe-card-exp&#x27;, &#x27;12/28&#x27;);
+    await page.fill(&#x27;#stripe-card-cvc&#x27;, &#x27;123&#x27;);
+    await page.click(&#x27;button:has-text(&quot;Place Order&quot;)&#x27;);
+
+    // 7. Order Confirmation &amp; Order History
+    await expect(page).toHaveURL(/.*order-success.*/);
+    const orderId = await page.locator(&#x27;.order-id-badge&#x27;).innerText();
+    expect(orderId).toContain(&#x27;#SH-&#x27;);
+    await expect(page.locator(&#x27;.navbar-cart-badge&#x27;)).toHaveText(&#x27;0&#x27;);
+
+    await page.goto(&#x27;/account/orders&#x27;);
+    await expect(page.locator(&#x27;.order-history-list&#x27;)).toContainText(orderId);
+    await expect(page.locator(&#x27;.order-history-list&#x27;)).toContainText(&#x27;$137.59&#x27;);
+  });
+});</code></pre>
+</body>
+</html>

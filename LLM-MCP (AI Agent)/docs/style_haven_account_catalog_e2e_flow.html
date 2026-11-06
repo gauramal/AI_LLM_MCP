@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Style Haven - Unified E2E Functional Flow</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 12mm 10mm 12mm 10mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 11px;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    color: #0f172a;
+    font-size: 20px;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 6px;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  h2 {
+    color: #1e3a8a;
+    font-size: 15px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 4px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #1d4ed8;
+    font-size: 13px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  p, li {
+    font-size: 11px;
+    color: #334155;
+    margin: 4px 0;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 12px 0;
+  }
+  pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 9px;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  code {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-family: Menlo, Monaco, Consolas, monospace;
+  }
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+  .table-container {
+    margin: 8px 0 12px 0;
+    width: 100%;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5px;
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+  th {
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 5px;
+    border: 1px solid #334155;
+  }
+  td {
+    padding: 5px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+    background-color: #ffffff;
+  }
+  tbody tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+  strong {
+    color: #0f172a;
+  }
+</style>
+</head>
+<body>
+<h1>Solid End-to-End Functional Test Flow: User Account & Product Catalog</h1>
+<p><strong>Flow ID:</strong> <code>E2E-AC-CAT-FLOW-01</code></p>
+<p><strong>Flow Name:</strong> Unified Shopper Journey: Onboarding, Account Setup, Catalog Exploration, Variant Validation & Recommendation Personalization</p>
+<p><strong>Modules Covered:</strong> Module 1 (User Accounts & Profile Management) & Module 2 (Product Catalog, Search, Filtering & Recommendations)</p>
+<p><strong>Primary Objective:</strong> Validate the complete, continuous functional lifecycle of a new shopper—from account registration, profile setup, and session authentication through real-time catalog discovery, faceted filtering, PDP variant matrix selection, and dynamic AI-powered recommendation profiling.</p>
+<p><strong>Severity / Priority:</strong> P1 / Blocker</p>
+<p><strong>Target Execution Environment:</strong> Staging / Pre-Production</p>
+<p><strong>Estimated Run Time:</strong> Manual: ~15 mins | Automated (Playwright): ~45 seconds</p>
+<hr/>
+<h2>1. Flow Overview & Architecture Diagram</h2>
+<pre><code>[ Step 1: Onboarding ]
+  User Registration -&gt; Secure Password Enforcement -&gt; Email Verification Token
+         │
+         ▼
+[ Step 2: Session &amp; Security ]
+  JWT Issue &amp; Cookie Storage -&gt; Auto/Manual Login -&gt; Session Persistence
+         │
+         ▼
+[ Step 3: Profile &amp; Address Setup ]
+  Update Name/Phone -&gt; Save Default Shipping Address -&gt; Verify XSS Sanitization
+         │
+         ▼
+[ Step 4: Catalog Discovery &amp; Fuzzy Search ]
+  Keyword Search (&quot;vntage&quot;) -&gt; Typo-Tolerance Trigger -&gt; Search Results Hydration
+         │
+         ▼
+[ Step 5: Faceted Filtering &amp; Sorting ]
+  Filter: Size [M] + Price [$50-$150] + Brand -&gt; Sort: &quot;Newest Arrivals&quot; -&gt; URL Sync
+         │
+         ▼
+[ Step 6: PDP Variant Matrix &amp; Inventory Check ]
+  Select Color Swatch -&gt; Select Size -&gt; Stock Status &amp; Image Gallery Dynamic Swap
+         │
+         ▼
+[ Step 7: Size Chart &amp; Social Share Verification ]
+  Open Size Guide Drawer -&gt; Metric/Imperial Toggle -&gt; Social Share Link Assertion
+         │
+         ▼
+[ Step 8: Recommendation Profiling &amp; Wishlist ]
+  Heart/Wishlist Item -&gt; Navigate Home -&gt; Verify &quot;Recommended For You&quot; Personalization</code></pre>
+<hr/>
+<h2>2. Pre-conditions & Test Data Setup</h2>
+<div class="table-container"><table>
+<thead><tr><th>Category</th><th>Prerequisite Details</th></tr></thead><tbody>
+<tr><td><strong>Environment State</strong></td><td>Staging environment with Elasticsearch / Algolia search index active, notification/email worker mock running.</td></tr>
+<tr><td><strong>Catalog State</strong></td><td>Minimum 100 products loaded across diverse designers (e.g., "Atelier Noir", "Studio Minimal"), with multi-variant SKUs (Colors: Black, Cream, Emerald; Sizes: XS, S, M, L).</td></tr>
+<tr><td><strong>Inventory State</strong></td><td>Specific test SKU: "Linen Oversized Blazer" where Variant <code>[Cream, M]</code> has stock = <code>0</code>, and Variant <code>[Black, M]</code> has stock = <code>5</code>.</td></tr>
+<tr><td><strong>Test User Persona</strong></td><td>Non-registered email: <code>shopper.fashion.e2e_<timestamp>@stylehaven.io</code>, Password: <code>SecurePass#2026!</code>, Shipping Address: <code>452 Fashion Ave, Apt 12B, New York, NY 10018</code>.</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>3. Comprehensive Step-by-Step E2E Test Execution</h2>
+<div class="table-container"><table>
+<thead><tr><th>Step #</th><th>Stage / Lifecycle Phase</th><th>Given / When / Then Test Steps</th><th>System Action & Internal Event</th><th>Expected Result & Verification Points</th><th>Pass/Fail Criteria</th></tr></thead><tbody>
+<tr><td><strong>01</strong></td><td><strong>User Registration & Validation</strong></td><td><strong>Given</strong> user is on <code>/register</code><br/><strong>When</strong> user inputs first name, last name, unique email, and password <code>SecurePass#2026!</code><br/><strong>And</strong> clicks "Create Account"<br/><strong>Then</strong> registration request is submitted</td><td>Client checks password policy (12+ chars, uppercase, lowercase, special char). API triggers <code>POST /api/v1/auth/register</code>, hashes password with bcrypt, generates verification token.</td><td>- Form validation passes with green indicators.<br/>- Verification screen appears: "Check your inbox".<br/>- Account record created in DB with <code>is_verified: false</code>.</td><td><strong>PASS:</strong> Verification email dispatched with valid signed token within 5 seconds.</td></tr>
+<tr><td><strong>02</strong></td><td><strong>Email Verification & Session Generation</strong></td><td><strong>Given</strong> verification email is delivered<br/><strong>When</strong> user clicks the activation link (<code>/verify?token=...</code>)<br/><strong>Then</strong> the account is activated and user logs in</td><td>Token is validated by backend, setting <code>is_verified: true</code>. Backend issues <code>accessToken</code> (HTTP-only JWT) and <code>refreshToken</code>.</td><td>- UI displays "Email verified successfully!".<br/>- User redirected to <code>/account/overview</code>.<br/>- Global navbar updates from "Sign In" to user avatar with first name initial.</td><td><strong>PASS:</strong> Authenticated session active; JWT stored securely in HTTP-only cookie.</td></tr>
+<tr><td><strong>03</strong></td><td><strong>Profile & Default Address Configuration</strong></td><td><strong>Given</strong> authenticated user is in <code>/account/profile</code><br/><strong>When</strong> user inputs phone <code>+1 212-555-0199</code><br/><strong>And</strong> adds shipping address: <code>452 Fashion Ave, Apt 12B</code>, New York, NY, <code>10018</code><br/><strong>And</strong> toggles "Set as Default Shipping Address"<br/><strong>Then</strong> clicks "Save Changes"</td><td>Client executes <code>PUT /api/v1/user/profile</code> and <code>POST /api/v1/user/addresses</code>. Server validates postal code and strips malicious XSS tags.</td><td>- Notification toast: "Profile and address saved".<br/>- Address card displays "DEFAULT" badge.<br/>- Reloading <code>/account/profile</code> retains all saved values without data loss.</td><td><strong>PASS:</strong> Address persisted; XSS injection payload sanitized; default flag set to true.</td></tr>
+<tr><td><strong>04</strong></td><td><strong>Global Navigation & Search Engine (Typo Tolerance)</strong></td><td><strong>Given</strong> user is on any storefront page<br/><strong>When</strong> user enters typo keyword <code>vntage jaket</code> in the search bar and presses Enter<br/><strong>Then</strong> search query executes</td><td>Request <code>GET /api/v1/catalog/search?q=vntage+jaket</code> sent to Elasticsearch/Algolia service. Fuzzy logic matches levenshtein distance <= 2.</td><td>- Search header displays: <em>"Showing results for <strong>vintage jacket</strong> (Did you mean: vintage jacket?)"</em>.<br/>- Results grid populates relevant outerwear items.<br/>- Zero-result empty state is NOT triggered.</td><td><strong>PASS:</strong> Accurate results returned despite spelling mistakes; query time < 350ms.</td></tr>
+<tr><td><strong>05</strong></td><td><strong>Faceted Filtering & Sorting Matrix</strong></td><td><strong>Given</strong> user is viewing search/catalog results<br/><strong>When</strong> user selects filters:<br/>  - <strong>Category:</strong> "Women's Blazers & Jackets"<br/>  - <strong>Designer / Brand:</strong> "Atelier Noir"<br/>  - <strong>Size:</strong> "M"<br/>  - <strong>Price:</strong> "$50 - $150"<br/><strong>And</strong> selects sort option: "Newest First"<br/><strong>Then</strong> catalog query refreshes</td><td>URL parameters dynamically update to <code>/catalog?category=blazers&brand=atelier-noir&size=M&price=50-150&sort=newest</code> without full page refresh.</td><td>- Product grid dynamically filters to matching items only.<br/>- Filter badge chips display selected attributes with "x" remove options.<br/>- Result count counter reflects the filtered subset.</td><td><strong>PASS:</strong> URL state matches applied filters; product grid displays only items satisfying all criteria.</td></tr>
+<tr><td><strong>06</strong></td><td><strong>PDP Navigation & High-Resolution Asset Loading</strong></td><td><strong>Given</strong> filtered product listing displays "Linen Oversized Blazer"<br/><strong>When</strong> user clicks the product card<br/><strong>Then</strong> browser transitions to Product Detail Page (<code>/products/linen-oversized-blazer</code>)</td><td>Next.js / frontend router navigates to PDP; <code>GET /api/v1/products/{id}</code> fetches full SKU matrix, breadcrumbs, size guide, reviews.</td><td>- Breadcrumb renders: <code>Home > Women > Blazers > Linen Oversized Blazer</code>.<br/>- Main image loads in high resolution with smooth placeholder blur-up.<br/>- Designer card displays "Sold by: Atelier Noir" with designer bio link.</td><td><strong>PASS:</strong> Page loads within 1.5s; all images and descriptions match catalog DB.</td></tr>
+<tr><td><strong>07</strong></td><td><strong>Variant Matrix & Out-of-Stock Handling</strong></td><td><strong>Given</strong> user is on PDP for "Linen Oversized Blazer"<br/><strong>When</strong> user clicks color swatch "Cream"<br/><strong>And</strong> selects size button "M" (Configured out of stock)<br/><strong>Then</strong> stock availability engine runs</td><td>Component checks variant matrix <code>SKU-BLAZER-CRM-M</code> where <code>stock_count == 0</code>.</td><td>- "Add to Cart" button immediately changes to disabled <strong>"Out of Stock"</strong>.<br/>- Subtext displays "Notify me when available" input box.<br/>- Image gallery swaps to photos of the <strong>Cream</strong> color variant.</td><td><strong>PASS:</strong> System prevents adding zero-inventory variant; UI correctly reflects out-of-stock state.</td></tr>
+<tr><td><strong>08</strong></td><td><strong>Variant Matrix & In-Stock Selection</strong></td><td><strong>Given</strong> user is still on PDP<br/><strong>When</strong> user clicks color swatch "Black"<br/><strong>And</strong> clicks size button "M" (Configured in stock = 5)<br/><strong>Then</strong> stock availability engine re-evaluates</td><td>Component checks <code>SKU-BLAZER-BLK-M</code> where <code>stock_count == 5</code>.</td><td>- "Add to Cart" button re-enables to active state.<br/>- Stock badge displays: <em>"Low Stock: Only 5 left!"</em>.<br/>- Image carousel switches to high-res images of the <strong>Black</strong> blazer.</td><td><strong>PASS:</strong> Button enabled; stock counter matches inventory DB; correct variant SKU selected.</td></tr>
+<tr><td><strong>09</strong></td><td><strong>Interactive Size Guide & Social Sharing</strong></td><td><strong>Given</strong> user wants to verify measurements<br/><strong>When</strong> user clicks "Size Guide" link<br/><strong>And</strong> toggles between "Inches" and "Centimeters"<br/><strong>And</strong> closes drawer, then clicks "Share" icon (Twitter/Copy Link)<br/><strong>Then</strong> interactions respond smoothly</td><td>Size drawer opens with accessible modal focus trap. Unit conversion recalculates table values dynamically. Share trigger copies clean canonical URL to clipboard.</td><td>- Unit conversion switches values accurately (e.g., Chest: 38" -> 96.5 cm).<br/>- Modal closes cleanly without page scroll displacement.<br/>- Clipboard receives valid URL: <code>https://stylehaven.io/products/linen-oversized-blazer</code>.</td><td><strong>PASS:</strong> Size conversions mathematically correct; share link copied without tracking artifacts.</td></tr>
+<tr><td><strong>10</strong></td><td><strong>Wishlist Persistence & Personalized Recommendations</strong></td><td><strong>Given</strong> user is authenticated<br/><strong>When</strong> user clicks the Heart icon on the PDP<br/><strong>And</strong> navigates back to Home page (<code>/</code>)<br/><strong>Then</strong> user checks "My Wishlist" and the "Recommended For You" feed</td><td>API sends <code>POST /api/v1/wishlist</code> with product ID. Recommendation engine logs user interest vector <code>[category: blazers, style: minimalist, designer: Atelier Noir]</code>.</td><td>- Heart icon fills with active color.<br/>- Item appears in <code>/account/wishlist</code>.<br/>- Home page carousel <strong>"Recommended For You"</strong> features complementary items (e.g., matching tailored trousers, linen skirts from Atelier Noir).</td><td><strong>PASS:</strong> Wishlist item persisted across page navigation; recommendations adapt to browsing behavior.</td></tr>
+</tbody></table></div>
+<hr/>
+<h2>4. Edge Cases & Boundary Validations within this Flow</h2>
+<p>1. <strong>Session Resiliency Across Tabs:</strong></p>
+<li>When User registers and logs in on Tab 1, opening Tab 2 should immediately reflect the authenticated state and cart/wishlist counters without requiring re-login.</li>
+<p>2. <strong>Concurrent Variant Depletion:</strong></p>
+<li>If stock for Variant <code>[Black, M]</code> drops from 1 to 0 in another concurrent session while the user is looking at the PDP, attempting to click "Add to Cart" must query real-time stock and display a gentle warning: <em>"Sorry, this item was just claimed by another shopper"</em>.</li>
+<p>3. <strong>Deep Link / URL Direct Navigation:</strong></p>
+<li>Copying the filtered catalog URL <code>https://stylehaven.io/catalog?brand=atelier-noir&size=M</code> into an incognito window must restore the exact same filters, sort order, and product grid.</li>
+<p>4. <strong>Special Character & Unicode Handling:</strong></p>
+<li>Searching for designer names with accents or non-Latin glyphs (e.g., <code>Chloé</code>, <code>Renée</code>, <code>Ателье</code>) must resolve to the correct designer store without encoding corruptions (<code>%20</code>, <code>&amp;</code>).</li>
+<hr/>
+<h2>5. Playwright Automation Implementation Spec</h2>
+<pre><code>// tests/e2e/user-account-catalog-flow.spec.ts
+import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test.describe(&#x27;E2E Flow: User Account Onboarding to Product Catalog Discovery&#x27;, () =&gt; {
+  const timestamp = Date.now();
+  const testEmail = `shopper_${timestamp}@stylehaven.io`;
+  const password = &#x27;SecurePass#2026!&#x27;;
+
+  test(&#x27;Complete Shopper Journey: Register, Setup Profile, Search, Filter, Variant &amp; Wishlist&#x27;, async ({ page }) =&gt; {
+    // 1. Onboarding &amp; Registration
+    await page.goto(&#x27;/register&#x27;);
+    await page.fill(&#x27;input[name=&quot;firstName&quot;]&#x27;, &#x27;Sophia&#x27;);
+    await page.fill(&#x27;input[name=&quot;lastName&quot;]&#x27;, &#x27;Vance&#x27;);
+    await page.fill(&#x27;input[name=&quot;email&quot;]&#x27;, testEmail);
+    await page.fill(&#x27;input[name=&quot;password&quot;]&#x27;, password);
+    await page.click(&#x27;button[type=&quot;submit&quot;]&#x27;);
+    await expect(page.locator(&#x27;.verification-notice&#x27;)).toBeVisible();
+
+    // 2. Simulate Token Verification &amp; Login
+    await page.goto(`/verify?token=mock_valid_token_${timestamp}`);
+    await expect(page.locator(&#x27;.navbar-user-avatar&#x27;)).toContainText(&#x27;S&#x27;);
+
+    // 3. Profile &amp; Address Setup
+    await page.goto(&#x27;/account/profile&#x27;);
+    await page.fill(&#x27;input[name=&quot;phone&quot;]&#x27;, &#x27;+12125550199&#x27;);
+    await page.fill(&#x27;input[name=&quot;addressLine1&quot;]&#x27;, &#x27;452 Fashion Ave, Apt 12B&#x27;);
+    await page.fill(&#x27;input[name=&quot;city&quot;]&#x27;, &#x27;New York&#x27;);
+    await page.selectOption(&#x27;select[name=&quot;state&quot;]&#x27;, &#x27;NY&#x27;);
+    await page.fill(&#x27;input[name=&quot;zip&quot;]&#x27;, &#x27;10018&#x27;);
+    await page.click(&#x27;button:has-text(&quot;Save Changes&quot;)&#x27;);
+    await expect(page.locator(&#x27;.toast-success&#x27;)).toBeVisible();
+
+    // 4. Global Fuzzy Search
+    await page.fill(&#x27;input[type=&quot;search&quot;]&#x27;, &#x27;vntage jaket&#x27;);
+    await page.keyboard.press(&#x27;Enter&#x27;);
+    await expect(page.locator(&#x27;.search-correction&#x27;)).toContainText(&#x27;vintage jacket&#x27;);
+
+    // 5. Faceted Filtering
+    await page.click(&#x27;label:has-text(&quot;Atelier Noir&quot;)&#x27;);
+    await page.click(&#x27;button[data-size=&quot;M&quot;]&#x27;);
+    await page.selectOption(&#x27;select[name=&quot;sort&quot;]&#x27;, &#x27;newest&#x27;);
+    await expect(page).toHaveURL(/.*brand=atelier-noir.*size=M/);
+
+    // 6. PDP Variant Validation (Out-of-Stock vs In-Stock)
+    await page.click(&#x27;.product-card:has-text(&quot;Linen Oversized Blazer&quot;)&#x27;);
+    await page.click(&#x27;button[data-color=&quot;Cream&quot;]&#x27;);
+    await page.click(&#x27;button[data-size=&quot;M&quot;]&#x27;);
+    await expect(page.locator(&#x27;button.btn-add-to-cart&#x27;)).toBeDisabled();
+    await expect(page.locator(&#x27;.stock-status&#x27;)).toContainText(&#x27;Out of Stock&#x27;);
+
+    // Switch to in-stock variant
+    await page.click(&#x27;button[data-color=&quot;Black&quot;]&#x27;);
+    await expect(page.locator(&#x27;button.btn-add-to-cart&#x27;)).toBeEnabled();
+    await expect(page.locator(&#x27;.stock-status&#x27;)).toContainText(&#x27;Low Stock: Only 5 left!&#x27;);
+
+    // 7. Size Chart Drawer
+    await page.click(&#x27;button:has-text(&quot;Size Guide&quot;)&#x27;);
+    await expect(page.locator(&#x27;.size-chart-drawer&#x27;)).toBeVisible();
+    await page.click(&#x27;button:has-text(&quot;Centimeters&quot;)&#x27;);
+    await expect(page.locator(&#x27;.metric-measurement&#x27;)).toBeVisible();
+    await page.click(&#x27;.size-chart-drawer .btn-close&#x27;);
+
+    // 8. Wishlist &amp; Recommendation Profiling
+    await page.click(&#x27;button.btn-wishlist&#x27;);
+    await expect(page.locator(&#x27;button.btn-wishlist svg&#x27;)).toHaveClass(/active|filled/);
+    await page.goto(&#x27;/&#x27;);
+    await expect(page.locator(&#x27;#recommended-for-you .product-card&#x27;)).toHaveCount(4);
+  });
+});</code></pre>
+</body>
+</html>
